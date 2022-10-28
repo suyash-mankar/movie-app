@@ -32,7 +32,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { list } = this.props.store.getState().movies; // movies : {list: Array(12), favourites: Array(2)}
+    const { list, favourites } = this.props.store.getState().movies; // movies : {list: Array(12), favourites: Array(2)}
 
     return (
       <div className="App">
