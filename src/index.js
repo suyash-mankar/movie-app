@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import thunk from "redux-thunk";
 
 import "./index.css";
 import App from "./components/App";
-import {movies, search} from "./reducers";
-
+import { movies, search } from "./reducers";
 
 // function logger(obj, next, action)
 // logger(obj)(next)(action) - internally redux will be doing this
@@ -17,22 +17,37 @@ import {movies, search} from "./reducers";
 //       next(action);
 //     }
 //   }
-// } 
+// }
+
+const logger =
+  ({ dispatch, getState }) =>
+  (next) =>
+  (action) => {
+    //logger code
+    if(typeof action !== 'function'){
+      console.log("ACTION_TYPE = ", action.type);
+    }
+    next(action);   
+  };
 
 
-const logger = ({dispatch, getState}) => (next) => (action) => {
-  //logger code
-  console.log('ACTION_TYPE = ', action.type);
-      next(action);
-}
+// const thunk = 
+// ({ dispatch, getState }) =>
+// (next) =>
+// (action) => {
+//   if(typeof(action)=='function'){
+//     action(dispatch)
+//     return;
+//   }
+//   next(action);
+// };
 
-
-const store = configureStore({
+  const store = configureStore({
   reducer: {
     movies,
-    search
+    search,
   },
-  middleware: [logger]
+  middleware: [logger, thunk],
 });
 
 console.log("store:", store);
