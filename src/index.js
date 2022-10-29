@@ -4,11 +4,12 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import "./index.css";
 import App from "./components/App";
-import movies from "./reducers";
+import {movies, search} from "./reducers";
 
 const store = configureStore({
   reducer: {
     movies,
+    search
   },
 });
 
