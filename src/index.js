@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import ReactDOM from "react-dom/client";
 import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
@@ -24,14 +24,13 @@ const logger =
   (next) =>
   (action) => {
     //logger code
-    if(typeof action !== 'function'){
+    if (typeof action !== "function") {
       console.log("ACTION_TYPE = ", action.type);
     }
-    next(action);   
+    next(action);
   };
 
-
-// const thunk = 
+// const thunk =
 // ({ dispatch, getState }) =>
 // (next) =>
 // (action) => {
@@ -42,7 +41,7 @@ const logger =
 //   next(action);
 // };
 
-  const store = configureStore({
+const store = configureStore({
   reducer: {
     movies,
     search,
@@ -50,7 +49,24 @@ const logger =
   middleware: [logger, thunk],
 });
 
-console.log("store:", store);
+console.log("state", store.getState);
+
+export const StoreContext = createContext();
+console.log("StoreContext", StoreContext);
+
+class Provider extends React.Component {
+
+  render() {
+    const { store } = this.props;
+    return <StoreContext.Provider value={store}>
+      {this.props.children}
+    </StoreContext.Provider>;
+  }
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App store={store} />);
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
